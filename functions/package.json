@@ -2,8 +2,15 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "dependencies": {
+    "firebase": "^4.1.1",
     "firebase-admin": "~4.2.1",
-    "firebase-functions": "^0.5.7"
+    "firebase-functions": "^0.5.7",
+    "lru-cache": "^4.0.2",
+    "vue": "^2.3.3",
+    "vue-router": "^2.5.3",
+    "vue-server-renderer": "^2.3.3",
+    "vuex": "^2.3.1",
+    "vuex-router-sync": "^4.2.0"
   },
   "private": true
 }
