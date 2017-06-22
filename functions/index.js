@@ -5,8 +5,8 @@ const path = require('path')
 const LRU = require('lru-cache')
 const template = fs.readFileSync(path.resolve(__dirname, './index.template.html'), 'utf-8')
 const { createBundleRenderer } = require('vue-server-renderer')
-const bundle = require('./vue-ssr-server-bundle.json')
-const clientManifest = require('./vue-ssr-client-manifest.json')
+const bundle = require('./dist/vue-ssr-server-bundle.json')
+const clientManifest = require('./dist/vue-ssr-client-manifest.json')
 const renderer = createBundleRenderer(bundle, {
     template,
     cache: LRU({
@@ -27,6 +27,7 @@ exports.index = functions.https.onRequest((req, res) => {
     const s = Date.now()
 
     res.setHeader('content-type', 'text/html')
+    res.setHeader('cache-control', 'public, max-age=300, s-maxage=600')
 
     const handleError = err => {
         if (err && err.code == 404) {

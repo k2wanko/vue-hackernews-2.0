@@ -13,7 +13,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../functions/dist'),
     publicPath: '/',
-    filename: '[name].[chunkhash].js'
+    filename: '[name].js?[chunkhash]'
   },
   resolve: {
     alias: {
@@ -62,7 +62,7 @@ module.exports = {
           compress: { warnings: false }
         }),
         new ExtractTextPlugin({
-          filename: 'common.[chunkhash].css'
+          filename: '[name].css?[chunkhash]'
         })
       ]
     : [
