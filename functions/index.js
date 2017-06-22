@@ -10,8 +10,8 @@ const clientManifest = require('./dist/vue-ssr-client-manifest.json')
 const renderer = createBundleRenderer(bundle, {
     template,
     cache: LRU({
-      max: 1000,
-      maxAge: 1000 * 60 * 15
+        max: 1000,
+        maxAge: 1000 * 60 * 15
     }),
     clientManifest,
     basedir: path.resolve('./dist'),
@@ -19,8 +19,8 @@ const renderer = createBundleRenderer(bundle, {
 })
 
 const microCache = LRU({
-  max: 100,
-  maxAge: 1000
+    max: 100,
+    maxAge: 1000
 })
 
 exports.index = functions.https.onRequest((req, res) => {
@@ -30,19 +30,15 @@ exports.index = functions.https.onRequest((req, res) => {
     res.setHeader('cache-control', 'public, max-age=300, s-maxage=600')
 
     const handleError = err => {
-        if (err && err.code == 404) {
+        if (err.url) {
+            res.redirect(err.url)
+        } else if (err.code == 404) {
             res.status(404).end('404 | Page Not Found')
         } else {
             res.status(500).end('500')
             console.error(`error : ${req.url}`)
             console.error(err.stack)
         }
-    }
-
-    const hit = microCache.get(req.url)
-    if (hit) {
-        console.log(`cache hit!`)
-        return res.end(hit)
     }
 
     const context = {
@@ -54,7 +50,6 @@ exports.index = functions.https.onRequest((req, res) => {
             return handleError(err)
         }
         res.end(html)
-        microCache.set(req.url, html)
         console.log(`whole request: ${Date.now() - s}ms`)
     })
 })
